@@ -4,7 +4,6 @@ from yoel_engine import *
 
 class player(y_entity):
     # attributes (properties)
-    world = yoel_engine.world;
     y_type = "player"
 
     
@@ -61,7 +60,7 @@ class player(y_entity):
         enemy = y_entity.collide(self,"enemy")
     #return
         if enemy:
-            print"hit"
+            yoel_engine.change_world("game_over");
    #end colide_stick
 
 ########################end player##################################

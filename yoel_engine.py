@@ -30,7 +30,7 @@ class yoel_engine:
     worlds = []
   
     camera = {'x': 0 , 'y': 0 , 'z': 1 , 'f':1}
-    framerate = 0
+    framerate = 20
     
  
     # methods
@@ -42,7 +42,38 @@ class yoel_engine:
     @staticmethod
     def set_world(world):
         yoel_engine.world = world
-        #end set_world
+        #end set_world 
+        
+    @staticmethod
+    def add_world(world,wname):
+        #print wname
+        world.name = wname
+        yoel_engine.worlds.append(world)
+    #end add_world            
+    @staticmethod
+    def change_world(wname,do_init=True):
+
+        for i in yoel_engine.worlds:
+            if i.name == wname:
+                yoel_engine.world = i
+                if do_init:
+                    yoel_engine.world.init()
+                yoel_engine.world.not_active = False;   
+                i.show_all()
+                #print i.y_world_mc
+            else:
+                #print i.name
+                i.hide_all()
+                i.not_active = True;
+                
+    #end change_world
+
+    @staticmethod
+    def get_world(wname):
+        for i in yoel_engine.worlds:
+            if i.name == wname:
+                return i
+        return False
         
     @staticmethod     
     def set_camera(self,x,y,z,f):
@@ -54,9 +85,9 @@ class yoel_engine:
         
     @staticmethod
     def init(framerate):
+            yoel_engine.framerate = framerate
             yoel_engine.scene.center =(yoel_engine.camera['x'],yoel_engine.camera['y'],yoel_engine.camera['z'] )
             if hasattr(yoel_engine.world, 'update'):
-                yoel_engine.world.init()
                 yoel_engine.game_loop =True
                 yoel_engine.game_loop = set_interval(framerate)
                 
@@ -70,25 +101,21 @@ class yoel_engine:
     @staticmethod
     def change_framerate(framerate):
             #end set_camera(50,50...)
+            yoel_engine.game_loop =False
             if hasattr(yoel_engine.world, 'update'):
-                yoel_engine.game_loop = set_interval(yoel_engine.world.update,framerate)
+                yoel_engine.game_loop =True
+                yoel_engine.game_loop = set_interval(framerate)
             #self.set_camera = set_camera
 
         #end change_framerate
             
-    @staticmethod         
-    def get_camera(self,framerate):
-            #end set_camera(50,50...)
-            #end game loop = setintrval
-            self.set_camera = set_camera
 
-        #end get_camera
-        
-yoel_engine.game_loop =0
+
+
 yoel_engine.world = 0
 yoel_engine.camera = {'x': 0 , 'y': 0 , 'z': 1 , 'f':1}
 yoel_engine.rot = {'x': 0 , 'y': 0 , 'z': -1 , 'f':1}
-yoel_engine.framerate = 0
+yoel_engine.framerate = 20
 
 yoel_engine.scene = display(title='yoel engine',
      x=0, y=0, width=600, height=400,
@@ -103,23 +130,40 @@ yoel_engine.game_loop =True
 class y_world:
     # attributes (properties)
     y_world_mc = []
-    debug_mode = true
+    debug_mode = True
     current_scene = 1
+    name = ""
+    not_active = False
     # methods
     
-    #def __init__():
+    def __init__(self):
+        self.y_world_mc = []
     #end __init__
     
-    def init():
+    def init(self):
         bla=0
+    def hide_all(self):
+        for i in self.y_world_mc:
+            i.grafic.visible  = False
+            #print i
+    #end hide all
+    def show_all(self):
+        for i in self.y_world_mc:
+            i.grafic.visible  = True
+            #print i
+    #end hide all
     def update(self):
-       
+
+        if self.not_active:
+            self.hide_all();
+            return;
+    
         for i in self.y_world_mc:
             if hasattr(i, 'update'):
                 if i.scene == self.current_scene:
-                    i.update()
+                    i.update();
                 else:
-                    i.grafic.visible  = False
+                    i.grafic.visible  = False;
                     #print 1
                     
 
@@ -137,13 +181,22 @@ class y_world:
 
     def add(self,entity):
        #place = int(self.y_world_mc.__len__())
+       entity.world = self
        self.y_world_mc.append(entity)
        #print self.y_world_mc
     #end add
 
     def remove(self,entity):
+       if hasattr(entity, 'remove'):
+        entity.remove()
        entity.removed()
        self.y_world_mc.remove(entity)
+    def remove_all(self):
+        for i in self.y_world_mc:
+            #print i
+            self.remove(i)
+        self.y_world_mc = []
+    
        
       
        #entity.colide_circle.visible  = False
@@ -424,6 +477,33 @@ yoel_engine.scene.bind('mousemove', handle_mousemove)
         
 ###############end input ##########################################
 
+################timer#################
+class y_timer:
+    count = 0
+    max_count = 20;
+    def __init__(self,mc):
+       self.max_count = mc 
+    def finished(self):
+        if self.count>self.max_count:
+            self.count = 0
+            return True
+        self.count += 1
+################end timer#################
+
+##########ylabel###########
+class ylabel(y_entity):
+    y_type = "label"
+    def __init__(self,x=0,y=0,z=0,txt=""):
+        g = label(text=txt)
+        g.height  = 22
+        y_entity.__init__(self,x,y,z,g,0)
+   ##end init
+    def stxt(self,ntxt):
+        self.grafic.text = ntxt;
+    ##end ctext
+##########ylabel###########
+
+
 ###################################################################################################
 #sphere()
 #import py_compile
@@ -432,5 +512,5 @@ yoel_engine.scene.bind('mousemove', handle_mousemove)
 
 #py_compile.compile("yoel_engine.py")
 
-
-
+def randInt(min, max):
+    return int(floor(random() * (max - min + 1) + min));
