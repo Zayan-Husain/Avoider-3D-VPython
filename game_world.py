@@ -14,10 +14,8 @@ class game_world(y_world):
         self.remove_all();
         self.spawn_timer = y_timer(40);
         yplayer = player(0,2,1,sphere(),0.5);
-        yenemy = enemy(0,2,-25,box(),0.5);
         self.score_label = ylabel(10, 0, 0, "Score: " + str(self.score));
         self.add(yplayer) ;
-        self.add(yenemy) ;
         self.add(self.score_label);
         
     #end init
