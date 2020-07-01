@@ -13,9 +13,11 @@ class game_world(y_world):
     def init(self):
         self.remove_all();
         self.spawn_timer = y_timer(40);
+        enemy2 = enemy(1, 2, 2, sphere(), 0.05);
         yplayer = player(0,2,1,sphere(),0.5);
         self.score_label = ylabel(10, 0, 0, "Score: " + str(self.score));
         self.add(yplayer) ;
+        self.add(enemy2) ;
         self.add(self.score_label);
         
     #end init
@@ -49,7 +51,7 @@ class game_world(y_world):
           z = 10;
         elif enemyDir == "b":
           z = -10;
-        e = enemy(x, y, z, box(), 0.5);
+        e = enemy(x, y, z, box(), 0.25);
         e.dir = enemyDir
         self.add(e);
     # end spawn_enemy

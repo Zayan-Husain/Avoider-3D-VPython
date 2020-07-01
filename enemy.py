@@ -11,21 +11,47 @@ class enemy(y_entity):
       y_entity.update(self);
       self.move();
       self.wall_loop();
+      self.checkDistance(self.get_by_type("player")[0]);
     # end update
     def wall_loop(self):
+      s = self;
       if self.y > 20:
         self.y = -20;
+        s.randomize("x");
+        s.randomize("z");
       elif self.y < -20:
         self.y = 20;
+        s.randomize("x");
+        s.randomize("z");
       elif self.x < -20:
         self.x = 20;
+        s.randomize("y");
+        s.randomize("z");
       elif self.x > 20:
         self.x = -20;
+        s.randomize("y");
+        s.randomize("z");
       elif self.z < -20:
         self.z = 20;
+        s.randomize("x");
+        s.randomize("y");
       elif self.z > 20:
         self.z = -20;
+        s.randomize("x");
+        s.randomize("y");
+
+    def randomize(self, w):
+      setattr(self, w, randInt(-10, 10));
       
+    def checkDistance(self, obj):
+      delta = (self.x - obj.x) + (self.y - obj.y) + (self.z - obj.z);
+      if (delta<0):
+        return;
+      dist = sqrt(delta);
+      if dist < 1.5:
+        self.grafic.color = color.red;
+      else:
+        self.grafic.color = color.white;
 
     def move(self):
       d = self.dir;
