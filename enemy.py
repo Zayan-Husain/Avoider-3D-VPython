@@ -11,7 +11,7 @@ class enemy(y_entity):
       y_entity.update(self);
       self.move();
       self.wall_loop();
-      self.checkDistance(self.get_by_type("player")[0]);
+      # self.checkDistance(self.get_by_type("player")[0]);
     # end update
     def wall_loop(self):
       s = self;

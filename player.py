@@ -13,6 +13,7 @@ class player(y_entity):
         self.move()
         self.wall_loop()
         self.colide_enemy()
+        self.getCoin();
     #end update
         
     def move(self):
@@ -61,7 +62,12 @@ class player(y_entity):
     #return
         if enemy:
             yoel_engine.change_world("game_over");
-   #end colide_stick
+   #end colide_enemy
+    def getCoin(self):
+      c = self.collide("coin");
+      if c:
+        self.world.score += 500;
+        self.world.remove(c);
 
 ########################end player##################################
             

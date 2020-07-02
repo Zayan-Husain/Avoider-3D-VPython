@@ -2,6 +2,7 @@ from yoel_engine import *
 from player import *
 from enemy import *
 from random import *
+from coin import *
 
 ############### game_world ##########################################
 
@@ -10,14 +11,18 @@ class game_world(y_world):
     score = 0;
     score_label = 0;
     spawn_timer = 0;
+    coin_timer = 0;
+    mine_timer = 0;
     def init(self):
         self.remove_all();
         self.spawn_timer = y_timer(40);
-        enemy2 = enemy(1, 2, 2, sphere(), 0.05);
+        self.coin_timer = y_timer(100);
+        self.mine_timer = y_timer(150);
+        # enemy2 = enemy(1, 2, 2, sphere(), 0.05);
         yplayer = player(0,2,1,sphere(),0.5);
         self.score_label = ylabel(10, 0, 0, "Score: " + str(self.score));
         self.add(yplayer) ;
-        self.add(enemy2) ;
+        # self.add(enemy2) ;
         self.add(self.score_label);
         
     #end init
@@ -27,6 +32,8 @@ class game_world(y_world):
         self.score += 1;
         self.score_label.stxt("Score: " + str(self.score))
         self.spawn_enemy();
+        self.spawn_coin();
+        self.spawn_mine();
         if self.not_active:
             self.hide_all()
     #end update
@@ -55,5 +62,23 @@ class game_world(y_world):
         e.dir = enemyDir
         self.add(e);
     # end spawn_enemy
+
+    def spawn_coin(self):
+      if self.coin_timer.finished():
+        x = randInt(-10, 10);
+        y = randInt(-10, 10);
+        z = randInt(-10, 10);
+        s = sphere(color = color.yellow);
+        c = Coin(x, y, z, s)
+        self.add(c);
+
+    def spawn_mine(self):
+      if self.mine_timer.finished():
+        x = randInt(-10, 10);
+        y = randInt(-10, 10);
+        z = randInt(-10, 10);
+        s = sphere(color = color.red);
+        m = enemy(x, y, z, s, 0);
+        self.add(m);
 
 ###############end  game_world ##########################################
