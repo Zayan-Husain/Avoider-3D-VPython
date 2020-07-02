@@ -7,6 +7,6 @@ Survive as long as you can.
 
 Use the arrow keys to move, A to go up, and Z to go down.
 To compile the code, you will need to install VPython version 6.
-![gif 1](https://github.com/Zayan-Husain/Avoider-3D-VPython/blob/master/gifs/gameplay?raw=true)
+![gif 1](https://github.com/Zayan-Husain/Avoider-3D-VPython/blob/master/gifs/gameplay.gif?raw=true)
 
-![gif 2](https://github.com/Zayan-Husain/Avoider-3D-VPython/blob/master/gifs/gameplay(better)?raw=true)
+![gif 2](https://github.com/Zayan-Husain/Avoider-3D-VPython/blob/master/gifs/gameplay(better).gif?raw=true)
